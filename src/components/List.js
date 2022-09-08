@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, getProductById } from '../services/api';
+import { getCategories, getProductById, getProductsFromCategory } from '../services/api';
 
 class List extends React.Component {
   state = {
@@ -8,6 +8,8 @@ class List extends React.Component {
     categories: [],
     query: '',
     click: false,
+    retProducts: [],
+    checked: false,
   };
 
   async componentDidMount() {
@@ -25,14 +27,24 @@ class List extends React.Component {
     const { query } = this.state;
     const products = await getProductById(query);
     this.setState({ products,
-      click: true }, () => {
-      console.log(products);
-    });
+      click: true });
   };
 
   listProducts = () => {
-    const { products, click } = this.state;
+    const { products, click, checked, retProducts } = this.state;
     const { results } = products;
+    if (checked === true) {
+      console.log(retProducts);
+      return (
+        retProducts.results.map((e) => (
+          <div key={ e.id } data-testid="product">
+            <h6>{e.title}</h6>
+            <img src={ e.thumbnail } alt={ e.title } />
+            <h6>{e.price}</h6>
+          </div>
+        ))
+      );
+    }
     if (products.length === 0 && click === false) {
       return (
         <div data-testid="home-initial-message">
@@ -54,6 +66,14 @@ class List extends React.Component {
         </div>
       ))
     );
+  };
+
+  handleCheck = async (event) => {
+    const { target } = event;
+    const { value } = target;
+    const ret = await getProductsFromCategory(value);
+    this.setState({ checked: true,
+      retProducts: ret });
   };
 
   render() {
@@ -82,16 +102,18 @@ class List extends React.Component {
             Pesquisar
           </button>
         </div>
+        {this.categoryProducts}
         <div className="container">
           <aside className="categories">
             { categories.map((category, id) => (
               <label key={ id } data-testid="category" htmlFor="category">
                 <input
+                  onClick={ this.handleCheck }
                   key={ id }
                   type="radio"
                   id="category"
                   name="category"
-                  value={ category }
+                  value={ category.id }
                 />
                 {category.name}
               </label>
