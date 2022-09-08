@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+}
+
+.categories {
+  border: solid red 1px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
