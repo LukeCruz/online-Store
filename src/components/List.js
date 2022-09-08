@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 class List extends React.Component {
   state = {
@@ -17,6 +18,12 @@ class List extends React.Component {
             </div>
           )
           : <div>teste</div>}
+        <Link
+          data-testid="shopping-cart-button"
+          to="/cart"
+        >
+          Botao
+        </Link>
       </div>
     );
   }
