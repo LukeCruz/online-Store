@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getProductDetails } from '../services/api';
 import PropTypes from 'prop-types';
+import { getProductDetails } from '../services/api';
 
 class Product extends React.Component {
   state = {
