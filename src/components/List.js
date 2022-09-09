@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCategories, getProductById, getProductsFromCategory } from '../services/api';
+import Card from './Card';
 
 class List extends React.Component {
   state = {
@@ -34,14 +35,14 @@ class List extends React.Component {
     const { products, click, checked, retProducts } = this.state;
     const { results } = products;
     if (checked === true) {
-      console.log(retProducts);
       return (
         retProducts.results.map((e) => (
-          <div key={ e.id } data-testid="product">
-            <h6>{e.title}</h6>
-            <img src={ e.thumbnail } alt={ e.title } />
-            <h6>{e.price}</h6>
-          </div>
+          <Card
+            key={ e.id }
+            thumbnail={ e.thumbnail }
+            title={ e.title }
+            price={ e.price }
+          />
         ))
       );
     }
@@ -59,11 +60,13 @@ class List extends React.Component {
     }
     return (
       results.map((e) => (
-        <div key={ e.id } data-testid="product">
-          <h6>{e.title}</h6>
-          <img src={ e.thumbnail } alt={ e.title } />
-          <h6>{e.price}</h6>
-        </div>
+        <Card
+          key={ e.id }
+          id={ e.id }
+          thumbnail={ e.thumbnail }
+          title={ e.title }
+          price={ e.price }
+        />
       ))
     );
   };
