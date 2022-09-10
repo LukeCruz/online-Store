@@ -60,12 +60,19 @@ class List extends React.Component {
     if (checked === true) {
       return (
         retProducts.results.map((e) => (
-          <Card
-            key={ e.id }
-            thumbnail={ e.thumbnail }
-            title={ e.title }
-            price={ e.price }
-          />
+          <div>
+            <Card
+              key={ e.id }
+              thumbnail={ e.thumbnail }
+              title={ e.title }
+              price={ e.price }
+            />
+            <button
+            type='button'
+            onClick={this.clickSla}>
+              Adicionar ao carrinho
+            </button>
+          </div>
         ))
       );
     }
