@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, getProductsFromCategory } from '../services/api';
+import { getCategories, getProductById, getProductsFromCategory } from '../services/api';
 import Card from './Card';
 
 class List extends React.Component {
@@ -120,6 +120,15 @@ class List extends React.Component {
     const ret = await getProductsFromCategory(value);
     this.setState({ checked: true,
       retProducts: ret });
+  };
+
+  handleClick = async () => {
+    const { query } = this.state;
+    const products = await getProductById(query);
+    this.setState({ products,
+      click: true }, () => {
+      console.log(products);
+    });
   };
 
   render() {
