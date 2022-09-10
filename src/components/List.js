@@ -24,11 +24,32 @@ class List extends React.Component {
     this.setState({ [name]: value });
   };
 
-  handleClick = async () => {
-    const { query } = this.state;
-    const products = await getProductById(query);
-    this.setState({ products,
-      click: true });
+  clickSla = (event) => {
+    const element = JSON.parse(event.target.value);
+    const getItem = localStorage.getItem('cartProducts');
+    let json = JSON.parse(getItem);
+    if (json !== null) {
+      let trueFalse = false;
+      json.forEach((e) => {
+        if (e.title === element.title) {
+          e.quant += 1;
+          localStorage.setItem('cartProducts', JSON.stringify(json));
+          trueFalse = true;
+        }
+      });
+      if (trueFalse === false) {
+        element.quant = 1;
+        json.push(element);
+        localStorage.setItem('cartProducts', JSON.stringify(json));
+      }
+    }
+    if (json === null) {
+      json = [];
+      element.quant = 1;
+      console.log('null json');
+      json.push(element);
+      localStorage.setItem('cartProducts', JSON.stringify(json));
+    }
   };
 
   listProducts = () => {
@@ -37,12 +58,22 @@ class List extends React.Component {
     if (checked === true) {
       return (
         retProducts.results.map((e) => (
-          <Card
-            key={ e.id }
-            thumbnail={ e.thumbnail }
-            title={ e.title }
-            price={ e.price }
-          />
+          <div key={ e.title }>
+            <Card
+              key={ e.id }
+              thumbnail={ e.thumbnail }
+              title={ e.title }
+              price={ e.price }
+            />
+            <button
+              type="button"
+              data-testid="product-add-to-cart"
+              value={ JSON.stringify(e) }
+              onClick={ this.clickSla }
+            >
+              Adicione ao carrinho
+            </button>
+          </div>
         ))
       );
     }
@@ -60,13 +91,25 @@ class List extends React.Component {
     }
     return (
       results.map((e) => (
-        <Card
-          key={ e.id }
-          id={ e.id }
-          thumbnail={ e.thumbnail }
-          title={ e.title }
-          price={ e.price }
-        />
+        <div key={ e.title }>
+          <Card
+            key={ e.id }
+            id={ e.id }
+            thumbnail={ e.thumbnail }
+            title={ e.title }
+            price={ e.price }
+          />
+          <button
+            type="button"
+            data-testid="product-add-to-cart"
+            value={ JSON.stringify(e) }
+            onClick={ this.clickSla }
+          >
+            Adicione ao carrinho
+          </button>
+
+        </div>
+
       ))
     );
   };
@@ -77,6 +120,15 @@ class List extends React.Component {
     const ret = await getProductsFromCategory(value);
     this.setState({ checked: true,
       retProducts: ret });
+  };
+
+  handleClick = async () => {
+    const { query } = this.state;
+    const products = await getProductById(query);
+    this.setState({ products,
+      click: true }, () => {
+      console.log(products);
+    });
   };
 
   render() {
