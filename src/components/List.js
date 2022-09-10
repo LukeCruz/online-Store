@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, getProductById, getProductsFromCategory } from '../services/api';
+import { getCategories, getProductsFromCategory } from '../services/api';
 import Card from './Card';
 
 class List extends React.Component {
@@ -25,34 +25,32 @@ class List extends React.Component {
   };
 
   clickSla = (event) => {
-    const { cartProducts } = this.state
-    const element = JSON.parse(event.target.value)
-    const getItem = localStorage.getItem("cartProducts")
-    let json = JSON.parse(getItem)
+    const element = JSON.parse(event.target.value);
+    const getItem = localStorage.getItem('cartProducts');
+    let json = JSON.parse(getItem);
     if (json !== null) {
-      let trueFalse = false
-      json.map((e) => {
+      let trueFalse = false;
+      json.forEach((e) => {
         if (e.title === element.title) {
-          e.quant += 1
-          localStorage.setItem("cartProducts", JSON.stringify(json))
-          trueFalse = true
+          e.quant += 1;
+          localStorage.setItem('cartProducts', JSON.stringify(json));
+          trueFalse = true;
         }
-      })
+      });
       if (trueFalse === false) {
-        element.quant = 1
-        json.push(element)
-        localStorage.setItem("cartProducts", JSON.stringify(json))
+        element.quant = 1;
+        json.push(element);
+        localStorage.setItem('cartProducts', JSON.stringify(json));
       }
     }
     if (json === null) {
-      json = []
-      element.quant = 1
-      console.log('null json')
-      json.push(element)
-      localStorage.setItem("cartProducts", JSON.stringify(json))
-      
+      json = [];
+      element.quant = 1;
+      console.log('null json');
+      json.push(element);
+      localStorage.setItem('cartProducts', JSON.stringify(json));
     }
-  }
+  };
 
   listProducts = () => {
     const { products, click, checked, retProducts } = this.state;
@@ -60,7 +58,7 @@ class List extends React.Component {
     if (checked === true) {
       return (
         retProducts.results.map((e) => (
-          <div>
+          <div key={ e.title }>
             <Card
               key={ e.id }
               thumbnail={ e.thumbnail }
@@ -68,9 +66,12 @@ class List extends React.Component {
               price={ e.price }
             />
             <button
-            type='button'
-            onClick={this.clickSla}>
-              Adicionar ao carrinho
+              type="button"
+              data-testid="product-add-to-cart"
+              value={ JSON.stringify(e) }
+              onClick={ this.clickSla }
+            >
+              Adicione ao carrinho
             </button>
           </div>
         ))
@@ -90,13 +91,25 @@ class List extends React.Component {
     }
     return (
       results.map((e) => (
-        <Card
-          key={ e.id }
-          id={ e.id }
-          thumbnail={ e.thumbnail }
-          title={ e.title }
-          price={ e.price }
-        />
+        <div key={ e.title }>
+          <Card
+            key={ e.id }
+            id={ e.id }
+            thumbnail={ e.thumbnail }
+            title={ e.title }
+            price={ e.price }
+          />
+          <button
+            type="button"
+            data-testid="product-add-to-cart"
+            value={ JSON.stringify(e) }
+            onClick={ this.clickSla }
+          >
+            Adicione ao carrinho
+          </button>
+
+        </div>
+
       ))
     );
   };

@@ -1,15 +1,20 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 class ItemCart extends React.Component {
-  render () {
-    const { item } = this.props
+  render() {
+    const { item } = this.props;
     return (
       <div>
-        <h1>{item.title}</h1>
-        <h2>{item.quant}</h2>
+        <h1 data-testid="shopping-cart-product-name">{item.title}</h1>
+        <h2 data-testid="shopping-cart-product-quantity">{item.quant}</h2>
       </div>
-    )
+    );
   }
 }
 
-export default ItemCart
+ItemCart.propTypes = {
+  item: PropTypes.objectOf.isRequired,
+};
+
+export default ItemCart;
