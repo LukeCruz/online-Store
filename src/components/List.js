@@ -24,12 +24,35 @@ class List extends React.Component {
     this.setState({ [name]: value });
   };
 
-  handleClick = async () => {
-    const { query } = this.state;
-    const products = await getProductById(query);
-    this.setState({ products,
-      click: true });
-  };
+  clickSla = (event) => {
+    const { cartProducts } = this.state
+    const element = JSON.parse(event.target.value)
+    const getItem = localStorage.getItem("cartProducts")
+    let json = JSON.parse(getItem)
+    if (json !== null) {
+      let trueFalse = false
+      json.map((e) => {
+        if (e.title === element.title) {
+          e.quant += 1
+          localStorage.setItem("cartProducts", JSON.stringify(json))
+          trueFalse = true
+        }
+      })
+      if (trueFalse === false) {
+        element.quant = 1
+        json.push(element)
+        localStorage.setItem("cartProducts", JSON.stringify(json))
+      }
+    }
+    if (json === null) {
+      json = []
+      element.quant = 1
+      console.log('null json')
+      json.push(element)
+      localStorage.setItem("cartProducts", JSON.stringify(json))
+      
+    }
+  }
 
   listProducts = () => {
     const { products, click, checked, retProducts } = this.state;
