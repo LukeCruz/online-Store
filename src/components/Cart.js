@@ -20,14 +20,14 @@ class Cart extends React.Component {
 
   render() {
     const { cartItem, trueFalse } = this.state;
+    const emptyCartOrCart = cartItem === null;
     return (
       <div>
-        <h2 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h2>
-        {
-          trueFalse && cartItem.map((e) => (
+        {emptyCartOrCart
+          ? <h2 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h2>
+          : trueFalse && cartItem.map((e) => (
             <ItemCart item={ e } key={ e.title } />
-          ))
-        }
+          ))}
       </div>
     );
   }

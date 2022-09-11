@@ -25,6 +25,7 @@ class List extends React.Component {
   };
 
   clickSla = (event) => {
+    console.log(event.target);
     const element = JSON.parse(event.target.value);
     const getItem = localStorage.getItem('cartProducts');
     let json = JSON.parse(getItem);
@@ -140,7 +141,7 @@ class List extends React.Component {
           data-testid="shopping-cart-button"
           to="/cart"
         >
-          Botao
+          Carrinho
         </Link>
         <div>
           <input

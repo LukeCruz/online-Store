@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 class ItemCart extends React.Component {
   render() {
     const { item } = this.props;
+    console.log(item);
     return (
       <div>
         <h1 data-testid="shopping-cart-product-name">{item.title}</h1>
@@ -14,7 +15,7 @@ class ItemCart extends React.Component {
 }
 
 ItemCart.propTypes = {
-  item: PropTypes.objectOf.isRequired,
-};
+  item: PropTypes.shape({ root: PropTypes.string }),
+}.isRequired;
 
 export default ItemCart;
