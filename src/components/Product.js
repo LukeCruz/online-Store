@@ -2,11 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getProductDetails } from '../services/api';
+import Header from './Header';
 
 class Product extends React.Component {
   state = {
     details: {},
     attributes: [],
+    imgUrl: '',
   };
 
   async componentDidMount() {
@@ -14,10 +16,13 @@ class Product extends React.Component {
     const { params } = match;
     const { id } = params;
     const details = await getProductDetails(id);
-    const { attributes } = details;
+    const { attributes, pictures } = details;
+    const pictureToRender = pictures[Math.floor(Math.random() * pictures.length)];
+    console.log(pictureToRender);
     this.setState({
       details,
       attributes,
+      imgUrl: pictureToRender.url,
     });
   }
 
@@ -51,36 +56,43 @@ class Product extends React.Component {
   };
 
   render() {
-    const { details, attributes } = this.state;
+    const { details, attributes, imgUrl } = this.state;
     const { title, price, thumbnail } = details;
-
+    const cartHeader = true;
     return (
       <div data-testid="product">
-        <p data-testid="product-detail-name">{title}</p>
-        <p data-testid="product-detail-price">{price}</p>
-        <img data-testid="product-detail-image" src={ thumbnail } alt={ title } />
-        <ul>
-          {attributes.map((element) => (
-            <li key={ element.name }>{`${element.name}: ${element.value_name}`}</li>
-          ))}
-          <button
-            data-testid="product-detail-add-to-cart"
-            type="button"
-            onClick={ this.clickSla }
-            value={ JSON.stringify(details) }
-          >
-            Adicionar ao Carrinho
-          </button>
-        </ul>
-        <Link to="/cart">
-          <button
-            data-testid="shopping-cart-button"
-            type="button"
-          >
-            Ver Carrinho
-          </button>
-        </Link>
-
+        <Header cartHeader={ cartHeader } />
+        <div className="product-details">
+          <div className="img-title-product">
+            <p data-testid="product-detail-name">{title}</p>
+            <img data-testid="product-detail-image" src={ thumbnail } alt={ title } />
+          </div>
+          <h3 data-testid="product-detail-price">{`Preço: R$: ${price}`}</h3>
+          <div className="details-img-container">
+            <ul>
+              {attributes.map((element) => (
+                <li key={ element.name }>{`${element.name}: ${element.value_name}`}</li>
+              ))}
+              <button
+                data-testid="product-detail-add-to-cart"
+                type="button"
+                onClick={ this.clickSla }
+                value={ JSON.stringify(details) }
+              >
+                Adicionar ao Carrinho
+              </button>
+            </ul>
+            <img src={ imgUrl } alt={ title } />
+          </div>
+          <Link to="/cart">
+            <button
+              data-testid="shopping-cart-button"
+              type="button"
+            >
+              Ver Carrinho
+            </button>
+          </Link>
+        </div>
       </div>
     );
   }

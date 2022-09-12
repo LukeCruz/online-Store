@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { getCategories, getProductById, getProductsFromCategory } from '../services/api';
 import Card from './Card';
+import Header from './Header';
 
 class List extends React.Component {
   state = {
@@ -59,7 +59,7 @@ class List extends React.Component {
     if (checked === true) {
       return (
         retProducts.results.map((e) => (
-          <div key={ e.title }>
+          <div className="product-card" key={ e.title }>
             <Card
               key={ e.id }
               thumbnail={ e.thumbnail }
@@ -81,7 +81,7 @@ class List extends React.Component {
     if (products.length === 0 && click === false) {
       return (
         <div data-testid="home-initial-message">
-          <h2>Digite algum termo de pesquisa ou escolha uma categoria.</h2>
+          <h3>Digite algum termo de pesquisa ou escolha uma categoria.</h3>
         </div>
       );
     }
@@ -92,7 +92,7 @@ class List extends React.Component {
     }
     return (
       results.map((e) => (
-        <div key={ e.title }>
+        <div className="product-card" key={ e.title }>
           <Card
             key={ e.id }
             id={ e.id }
@@ -119,15 +119,19 @@ class List extends React.Component {
     const { target } = event;
     const { value } = target;
     const ret = await getProductsFromCategory(value);
-    this.setState({ checked: true,
-      retProducts: ret });
+    this.setState({
+      checked: true,
+      retProducts: ret,
+    });
   };
 
   handleClick = async () => {
     const { query } = this.state;
     const products = await getProductById(query);
-    this.setState({ products,
-      click: true }, () => {
+    this.setState({
+      products,
+      click: true,
+    }, () => {
       console.log(products);
     });
   };
@@ -135,49 +139,36 @@ class List extends React.Component {
   render() {
     const { categories, query } = this.state;
     return (
-      <div>
-        {this.listProducts()}
-        <Link
-          data-testid="shopping-cart-button"
-          to="/cart"
-        >
-          Carrinho
-        </Link>
-        <div>
-          <input
-            data-testid="query-input"
-            name="query"
-            value={ query }
-            onChange={ this.handleChange }
-          />
-          <button
-            data-testid="query-button"
-            type="submit"
-            onClick={ this.handleClick }
-          >
-            Pesquisar
-          </button>
-        </div>
-        {this.categoryProducts}
-        <div className="container">
-          <aside className="categories">
-            { categories.map((category, id) => (
-              <label key={ id } data-testid="category" htmlFor="category">
-                <input
-                  onClick={ this.handleCheck }
-                  key={ id }
-                  type="radio"
-                  id="category"
-                  name="category"
-                  value={ category.id }
-                />
-                {category.name}
-              </label>
-            ))}
-          </aside>
+      <div className="page-container">
+        <Header
+          handleChange={ this.handleChange }
+          handleClick={ this.handleClick }
+          query={ query }
+        />
+        <div className="main-container">
+          <div className="list-products">
+            {this.listProducts()}
+          </div>
+          {this.categoryProducts}
+          <div className="container">
+            <aside className="categories">
+              {categories.map((category, id) => (
+                <label key={ id } data-testid="category" htmlFor="category">
+                  <input
+                    onClick={ this.handleCheck }
+                    key={ id }
+                    type="radio"
+                    id="category"
+                    name="category"
+                    value={ category.id }
+                  />
+                  {category.name}
+                </label>
+              ))}
+            </aside>
+          </div>
         </div>
       </div>
-
     );
   }
 }
