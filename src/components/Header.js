@@ -28,6 +28,7 @@ class Header extends React.Component {
             </div>)}
         <h1> FrontEnd Online Store - Grupo 34</h1>
         <Link
+          data-testid="shopping-cart-button"
           to="/cart"
         >
           Carrinho
