@@ -86,7 +86,6 @@ class Product extends React.Component {
           </div>
           <Link to="/cart">
             <button
-              data-testid="shopping-cart-button"
               type="button"
             >
               Ver Carrinho
