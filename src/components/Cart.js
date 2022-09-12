@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from './Header';
 import ItemCart from './ItemCart';
 
 class Cart extends React.Component {
@@ -21,13 +22,20 @@ class Cart extends React.Component {
   render() {
     const { cartItem, trueFalse } = this.state;
     const emptyCartOrCart = cartItem === null;
+    const cartHeader = true;
     return (
       <div>
-        {emptyCartOrCart
-          ? <h2 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h2>
-          : trueFalse && cartItem.map((e) => (
-            <ItemCart item={ e } key={ e.title } />
-          ))}
+        <Header cartHeader={ cartHeader } />
+        <div className="cart-container">
+          <h2> Seu Carrinho</h2>
+          {emptyCartOrCart
+            ? <h2 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h2>
+            : trueFalse && cartItem.map((e) => (
+              <div key={ e.title }>
+                <ItemCart item={ e } key={ e.title } />
+              </div>
+            ))}
+        </div>
       </div>
     );
   }
