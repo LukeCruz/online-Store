@@ -6,12 +6,12 @@ class Form extends React.Component {
         email: '',
         message: '',
         rating: 0,
-        setRating: 0
+        setRating: 0,
+        emptyReview: false,
     }
 
     setRating = ({target}) => {
         const { value } = target
-        console.log(value)
         this.setState({
             setRating: value
         })
@@ -19,9 +19,13 @@ class Form extends React.Component {
     
     saveRating = () => {
         const { id } = this.props;
-        console.log(typeof(id))
         const {email, message, setRating} =  this.state
-        console.log(localStorage.getItem(id))
+        
+        if (email === "" || message === "" || setRating === 0) {
+          this.setState({emptyReview: true})
+          console.log('entrou if')
+          return
+        }
 
         if (localStorage.getItem(id) === null) {
             const emptyArray = []
@@ -29,7 +33,6 @@ class Form extends React.Component {
         }
         const JsonOfReviews = localStorage.getItem(id)
         const reviews = JSON.parse(JsonOfReviews)
-        console.log(reviews)
         const rating = {
             email: email,
             text: message,
@@ -39,6 +42,14 @@ class Form extends React.Component {
         reviews.push(rating)
 
         localStorage.setItem(id, JSON.stringify(reviews))
+
+        this.setState({
+            email: '',
+            message: '',
+            rating: 0,
+            setRating: 0,
+            emptyReview: false,
+        })
 
     }
 
@@ -51,6 +62,7 @@ class Form extends React.Component {
                     return (
                         
                         <button
+                            data-testid={`${index}-rating`}
                             type="button"
                             id='star-button'
                             key={index}
@@ -58,7 +70,6 @@ class Form extends React.Component {
                             onClick={this.setRating}
                             value={index}
                             >&#9733;
-                            {/* <p value={index} className="star">&#9733;</p> */}
                         </button>
                     );
                 })}
@@ -75,17 +86,20 @@ class Form extends React.Component {
 
 
     render() {
-        const { email, message } = this.state;
+        const { email, message, emptyReview } = this.state;
 
         return (
             <div data-testid="product">
 
                 <form>
-                    <input type="email" placeholder="Email" name="email" value={email} onChange={this.handleChange} ></input>
+                    <input type="email" placeholder="Email" name="email" data-testid="product-detail-email" value={email} onChange={this.handleChange} ></input>
                     {this.StarRating()}
-                    <textarea placeholder="Mensagem(Opcional)" name="message" value={message} onChange={this.handleChange} ></textarea>
-                <button type="button" onClick={this.saveRating}>Avaliar</button>
+                    <textarea data-testid="product-detail-evaluation" placeholder="Mensagem(Opcional)" name="message" value={message} onChange={this.handleChange} ></textarea>
+                <button data-testid="submit-review-btn" type="button" onClick={this.saveRating}>Avaliar</button>
                 </form>
+                {
+                  emptyReview && <p data-testid="error-msg">Campos inválidos</p>
+                }
             </div>
         );
     }

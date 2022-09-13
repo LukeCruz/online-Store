@@ -4,22 +4,31 @@ import PropTypes from 'prop-types';
 import { getProductDetails } from '../services/api';
 import Header from './Header';
 import Form from './Form';
+import Review from './Review';
 
 class Product extends React.Component {
   state = {
     details: {},
     attributes: [],
     imgUrl: '',
+    reviews: [],
+    trueFalse: false
   };
 
   async componentDidMount() {
     const { match } = this.props;
     const { params } = match;
     const { id } = params;
+    const getItem = localStorage.getItem(id)
+    const json = JSON.parse(getItem)
+    if (json !== null) {
+      this.setState({trueFalse: true,
+      reviews: json}, () => {
+        console.log(this.state, 'asdasd')}
+    )}
     const details = await getProductDetails(id);
     const { attributes, pictures } = details;
     const pictureToRender = pictures[Math.floor(Math.random() * pictures.length)];
-    console.log(pictureToRender);
     this.setState({
       details,
       attributes,
@@ -57,7 +66,7 @@ class Product extends React.Component {
   };
 
   render() {
-    const { details, attributes, imgUrl } = this.state;
+    const { details, attributes, imgUrl, reviews, trueFalse } = this.state;
     const { title, price, thumbnail } = details;
     const cartHeader = true;
     const { match } = this.props;
@@ -97,7 +106,13 @@ class Product extends React.Component {
           </Link>
         </div>
         <Form id={id} cartHeader={cartHeader}/>
-        {localStorage}
+        {
+          trueFalse && reviews.map((e) => {
+            return (
+              <Review email={e.email} message={e.text} rating={e.rating}/>
+            )
+          })
+        }
       </div>
     );
   }
