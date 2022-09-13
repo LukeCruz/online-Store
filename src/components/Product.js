@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { getProductDetails } from '../services/api';
 import Header from './Header';
 import Form from './Form';
-import Review from './Review';
 
 class Product extends React.Component {
   state = {
@@ -12,20 +11,21 @@ class Product extends React.Component {
     attributes: [],
     imgUrl: '',
     reviews: [],
-    trueFalse: false
+    trueFalse: false,
   };
 
   async componentDidMount() {
     const { match } = this.props;
     const { params } = match;
     const { id } = params;
-    const getItem = localStorage.getItem(id)
-    const json = JSON.parse(getItem)
+    const getItem = localStorage.getItem(id);
+    const json = JSON.parse(getItem);
     if (json !== null) {
-      this.setState({trueFalse: true,
-      reviews: json}, () => {
-        console.log(this.state, 'asdasd')}
-    )}
+      this.setState({ trueFalse: true,
+        reviews: json }, () => {
+        console.log(this.state, 'asdasd');
+      });
+    }
     const details = await getProductDetails(id);
     const { attributes, pictures } = details;
     const pictureToRender = pictures[Math.floor(Math.random() * pictures.length)];
@@ -105,14 +105,7 @@ class Product extends React.Component {
             </button>
           </Link>
         </div>
-        <Form id={id} cartHeader={cartHeader}/>
-        {
-          trueFalse && reviews.map((e) => {
-            return (
-              <Review email={e.email} message={e.text} rating={e.rating}/>
-            )
-          })
-        }
+        <Form id={ id } trueFalse={ trueFalse } reviews={ reviews } />
       </div>
     );
   }

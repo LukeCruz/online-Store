@@ -56,7 +56,7 @@ class ItemCart extends React.Component {
         <button
           onClick={ this.removeItem }
           type="button"
-          data-testid="remove-product"  
+          data-testid="remove-product"
         >
           Remover Produto
         </button>
