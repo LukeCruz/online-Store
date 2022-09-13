@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getProductDetails } from '../services/api';
 import Header from './Header';
+import Form from './Form';
 
 class Product extends React.Component {
   state = {
@@ -59,6 +60,9 @@ class Product extends React.Component {
     const { details, attributes, imgUrl } = this.state;
     const { title, price, thumbnail } = details;
     const cartHeader = true;
+    const { match } = this.props;
+    const { params } = match;
+    const { id } = params;
     return (
       <div data-testid="product">
         <Header cartHeader={ cartHeader } />
@@ -92,6 +96,8 @@ class Product extends React.Component {
             </button>
           </Link>
         </div>
+        <Form id={id} cartHeader={cartHeader}/>
+        {localStorage}
       </div>
     );
   }
