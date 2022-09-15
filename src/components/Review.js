@@ -1,25 +1,30 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Review extends React.Component {
   render() {
     const { email, message, rating } = this.props;
+    console.log(this.props);
     return (
-      <div data-testid="product">
+      <div>
         <p data-testid="review-card-email">
-          Email:
           { email }
         </p>
         <p data-testid="review-card-rating">
-          Mensagem
           { message }
         </p>
         <p data-testid="review-card-evaluation">
-          Avaliação
           { rating }
         </p>
       </div>
     );
   }
 }
+
+Review.propTypes = {
+  email: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  rating: PropTypes.number.isRequired,
+};
 
 export default Review;

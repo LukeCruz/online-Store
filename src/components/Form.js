@@ -1,74 +1,50 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Review from './Review';
 
 class Form extends React.Component {
   state = {
     email: '',
     message: '',
-    rating: 0,
-    setRating: 0,
+    rating: '',
     emptyReview: false,
     reviews: [],
   };
 
-  setRating = ({ target }) => {
-    const { value } = target;
-    this.setState({
-      setRating: value,
-    });
-  };
-
-  saveRating = () => {
+  componentDidMount() {
     const { id } = this.props;
-    const { email, message, setRating } = this.state;
-
-    if (email === '' || message === '' || setRating === 0) {
-      this.setState({ emptyReview: true });
-      console.log('entrou if');
-      return;
+    const getItem = localStorage.getItem(id);
+    const json = JSON.parse(getItem);
+    if (json !== null) {
+      this.setState({
+        reviews: json,
+      });
     }
+  }
 
-    if (localStorage.getItem(id) === null) {
-      const emptyArray = [];
-      localStorage.setItem(id, JSON.stringify(emptyArray));
-    }
-    const JsonOfReviews = localStorage.getItem(id);
-    const reviews = JSON.parse(JsonOfReviews);
-    const rating = {
-      email,
-      text: message,
-      rating: setRating,
-    };
-
-    reviews.push(rating);
-
-    localStorage.setItem(id, JSON.stringify(reviews));
+  handleChange = ({ target }) => {
+    const { value, name } = target;
     this.setState({
-      reviews,
-      email: '',
-      message: '',
-      rating: 0,
-      setRating: 0,
-      emptyReview: false,
+      [name]: value,
     });
   };
 
   StarRating = () => {
-    const { rating } = this.state;
+    const totalStars = 5;
     return (
       <div className="star-rating">
-        {[...Array(5)].map((star, index) => {
+        {[...Array(totalStars)].map((star, index) => {
           index += 1;
           return (
-            <label htmlFor='star-button' key={index}>
+            <label htmlFor="star-button" key={ index }>
               <input
-                data-testid={`${index}-rating`}
+                data-testid={ `${index}-rating` }
                 type="radio"
                 id="star-button"
-                key={index}
-                onClick={this.setRating}
-                value={index}
-                required
+                key={ index }
+                onClick={ this.handleChange }
+                value={ index }
+                name="rating"
               />
               {index}
             </label>
@@ -78,26 +54,53 @@ class Form extends React.Component {
     );
   };
 
-  handleChange = ({ target }) => {
-    const { value, name } = target;
+  clearState = () => {
     this.setState({
-      [name]: value,
+      email: '',
+      message: '',
+      rating: '',
+      emptyReview: false,
     });
+  };
+
+  saveRating = () => {
+    const { email, message, rating } = this.state;
+    const { id } = this.props;
+    const verifyInputs = email.length > 0 && rating.length > 0;
+    const verifyEmail = email.includes('@');
+    const validateAll = verifyEmail && verifyInputs;
+    const rateObj = {
+      email,
+      rating,
+      message,
+    };
+
+    if (validateAll) {
+      this.setState((prev) => ({
+        emptyReview: false,
+        reviews: [...prev.reviews, rateObj],
+      }), () => {
+        const { reviews } = this.state;
+        localStorage.setItem(id, JSON.stringify(reviews));
+      });
+      this.clearState();
+    } else {
+      this.setState({ emptyReview: true });
+    }
   };
 
   render() {
     const { email, message, emptyReview, reviews } = this.state;
-    const { trueFalse } = this.props;
     return (
-      <div data-testid="product">
+      <div>
         <form>
           <input
             type="email"
             placeholder="Email"
             name="email"
             data-testid="product-detail-email"
-            value={email}
-            onChange={this.handleChange}
+            value={ email }
+            onChange={ this.handleChange }
             required
           />
           {this.StarRating()}
@@ -105,32 +108,35 @@ class Form extends React.Component {
             data-testid="product-detail-evaluation"
             placeholder="Mensagem(Opcional)"
             name="message"
-            value={message}
-            onChange={this.handleChange}
+            value={ message }
+            onChange={ this.handleChange }
           />
           <button
             data-testid="submit-review-btn"
             type="button"
-            onClick={this.saveRating}
+            onClick={ this.saveRating }
           >
             Avaliar
           </button>
+          {
+            emptyReview && <p data-testid="error-msg">Campos inválidos</p>
+          }
         </form>
-        {
-          emptyReview && <p data-testid="error-msg">Campos inválidos</p>
-        }
-        {reviews.map((e) => (
+        {reviews.map((e, index) => (
           <Review
-            key={e.email}
-            email={e.email}
-            message={e.text}
-            rating={e.rating}
+            key={ index }
+            email={ e.email }
+            message={ e.message }
+            rating={ e.rating }
           />
-        ))
-        }
+        ))}
       </div>
     );
   }
 }
+
+Form.propTypes = {
+  id: PropTypes.string.isRequired,
+};
 
 export default Form;

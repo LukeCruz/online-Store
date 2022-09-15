@@ -64,6 +64,7 @@ class List extends React.Component {
               thumbnail={ e.thumbnail }
               title={ e.title }
               price={ e.price }
+              id={ e.id }
             />
             <button
               type="button"

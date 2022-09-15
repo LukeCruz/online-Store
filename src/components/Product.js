@@ -10,22 +10,17 @@ class Product extends React.Component {
     details: {},
     attributes: [],
     imgUrl: '',
-    reviews: [],
     trueFalse: false,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.getProductById();
+  }
+
+  async getProductById() {
     const { match } = this.props;
     const { params } = match;
     const { id } = params;
-    const getItem = localStorage.getItem(id);
-    const json = JSON.parse(getItem);
-    if (json !== null) {
-      this.setState({ trueFalse: true,
-        reviews: json }, () => {
-        console.log(this.state, 'asdasd');
-      });
-    }
     const details = await getProductDetails(id);
     const { attributes, pictures } = details;
     const pictureToRender = pictures[Math.floor(Math.random() * pictures.length)];
@@ -66,7 +61,7 @@ class Product extends React.Component {
   };
 
   render() {
-    const { details, attributes, imgUrl, reviews, trueFalse } = this.state;
+    const { details, attributes, imgUrl, trueFalse } = this.state;
     const { title, price, thumbnail } = details;
     const cartHeader = true;
     const { match } = this.props;
@@ -83,8 +78,8 @@ class Product extends React.Component {
           <h3 data-testid="product-detail-price">{`Preço: R$: ${price}`}</h3>
           <div className="details-img-container">
             <ul>
-              {attributes.map((element) => (
-                <li key={ element.name }>{`${element.name}: ${element.value_name}`}</li>
+              {attributes.map((element, index) => (
+                <li key={ index }>{`${element.name}: ${element.value_name}`}</li>
               ))}
               <button
                 data-testid="product-detail-add-to-cart"
@@ -105,7 +100,7 @@ class Product extends React.Component {
             </button>
           </Link>
         </div>
-        <Form id={ id } trueFalse={ trueFalse } reviews={ reviews } />
+        <Form id={ id } trueFalse={ trueFalse } />
       </div>
     );
   }
@@ -117,7 +112,6 @@ Product.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   }).isRequired,
-  obj: PropTypes.shape({ root: PropTypes.string }).isRequired,
 };
 
 export default Product;
