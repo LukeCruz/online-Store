@@ -32,7 +32,6 @@ class Product extends React.Component {
   }
 
   clickSla = (event) => {
-    console.log(event.target.value);
     const element = JSON.parse(event.target.value);
     const getItem = localStorage.getItem('cartProducts');
     let json = JSON.parse(getItem);

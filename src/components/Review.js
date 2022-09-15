@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 class Review extends React.Component {
   render() {
     const { email, message, rating } = this.props;
-    console.log(this.props);
     return (
       <div>
         <p data-testid="review-card-email">

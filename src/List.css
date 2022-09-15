@@ -17,6 +17,10 @@
   width: 280px;
 }
 
+.page-checkout-container input, label {
+  margin: 10px;
+}
+
 .categories label {
   margin-bottom: 10px;
 }
@@ -141,4 +145,16 @@
 
 .details-img-container img {
   height: 500px;
+}
+
+.page-checkout-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-checkout-container form {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
 }
