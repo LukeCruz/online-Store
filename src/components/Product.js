@@ -3,22 +3,27 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getProductDetails } from '../services/api';
 import Header from './Header';
+import Form from './Form';
 
 class Product extends React.Component {
   state = {
     details: {},
     attributes: [],
     imgUrl: '',
+    trueFalse: false,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.getProductById();
+  }
+
+  async getProductById() {
     const { match } = this.props;
     const { params } = match;
     const { id } = params;
     const details = await getProductDetails(id);
     const { attributes, pictures } = details;
     const pictureToRender = pictures[Math.floor(Math.random() * pictures.length)];
-    console.log(pictureToRender);
     this.setState({
       details,
       attributes,
@@ -27,7 +32,6 @@ class Product extends React.Component {
   }
 
   clickSla = (event) => {
-    console.log(event.target.value);
     const element = JSON.parse(event.target.value);
     const getItem = localStorage.getItem('cartProducts');
     let json = JSON.parse(getItem);
@@ -56,9 +60,12 @@ class Product extends React.Component {
   };
 
   render() {
-    const { details, attributes, imgUrl } = this.state;
+    const { details, attributes, imgUrl, trueFalse } = this.state;
     const { title, price, thumbnail } = details;
     const cartHeader = true;
+    const { match } = this.props;
+    const { params } = match;
+    const { id } = params;
     return (
       <div data-testid="product">
         <Header cartHeader={ cartHeader } />
@@ -70,8 +77,8 @@ class Product extends React.Component {
           <h3 data-testid="product-detail-price">{`Preço: R$: ${price}`}</h3>
           <div className="details-img-container">
             <ul>
-              {attributes.map((element) => (
-                <li key={ element.name }>{`${element.name}: ${element.value_name}`}</li>
+              {attributes.map((element, index) => (
+                <li key={ index }>{`${element.name}: ${element.value_name}`}</li>
               ))}
               <button
                 data-testid="product-detail-add-to-cart"
@@ -92,6 +99,7 @@ class Product extends React.Component {
             </button>
           </Link>
         </div>
+        <Form id={ id } trueFalse={ trueFalse } />
       </div>
     );
   }
@@ -103,7 +111,6 @@ Product.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   }).isRequired,
-  obj: PropTypes.shape({ root: PropTypes.string }).isRequired,
 };
 
 export default Product;

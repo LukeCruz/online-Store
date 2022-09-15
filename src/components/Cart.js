@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Header from './Header';
 import ItemCart from './ItemCart';
 
@@ -12,7 +13,6 @@ class Cart extends React.Component {
     const getItem = localStorage.getItem('cartProducts');
     const json = JSON.parse(getItem);
     this.setState({ cartItem: json }, () => {
-      console.log(typeof json, json);
       if (json !== null) {
         this.setState({ trueFalse: true });
       }
@@ -35,6 +35,14 @@ class Cart extends React.Component {
                 <ItemCart item={ e } key={ e.title } />
               </div>
             ))}
+          <Link to="/checkout">
+            <button
+              type="button"
+              data-testid="checkout-products"
+            >
+              Finalizar Compra
+            </button>
+          </Link>
         </div>
       </div>
     );

@@ -46,7 +46,6 @@ class List extends React.Component {
     if (json === null) {
       json = [];
       element.quant = 1;
-      console.log('null json');
       json.push(element);
       localStorage.setItem('cartProducts', JSON.stringify(json));
     }
@@ -57,13 +56,14 @@ class List extends React.Component {
     const { results } = products;
     if (checked === true) {
       return (
-        retProducts.results.map((e) => (
+        retProducts.results.map((e, index) => (
           <div className="product-card" key={ e.title }>
             <Card
-              key={ e.id }
+              key={ index }
               thumbnail={ e.thumbnail }
               title={ e.title }
               price={ e.price }
+              id={ e.id }
             />
             <button
               type="button"
@@ -90,10 +90,10 @@ class List extends React.Component {
       );
     }
     return (
-      results.map((e) => (
+      results.map((e, index) => (
         <div className="product-card" key={ e.title }>
           <Card
-            key={ e.id }
+            key={ index }
             id={ e.id }
             thumbnail={ e.thumbnail }
             title={ e.title }
