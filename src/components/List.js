@@ -86,6 +86,8 @@ class List extends React.Component {
     this.getCartQuant();
   };
 
+  freteGratis = (item) => item.shipping.free_shipping;
+
   listProducts = () => {
     const { products, click, checked, retProducts } = this.state;
     const { results } = products;
@@ -93,6 +95,7 @@ class List extends React.Component {
       return (
         retProducts.results.map((e, index) => (
           <div className="product-card" key={ e.title }>
+            { this.freteGratis(e) && <p data-testid="free-shipping">Frete Gratis</p> }
             <Card
               key={ index }
               thumbnail={ e.thumbnail }

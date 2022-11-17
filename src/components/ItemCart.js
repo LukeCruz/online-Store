@@ -25,12 +25,9 @@ class ItemCart extends React.Component {
   verifyAvaliabeQuantity = (elem) => {
     const cartItens = localStorage.getItem('cartProducts')
       ? JSON.parse(localStorage.getItem('cartProducts')) : [];
-    console.log(cartItens.length);
     if (cartItens.length === 0) return true;
     const veryfiCart = cartItens.filter((item) => item.id === elem.id);
-    console.log(veryfiCart);
     if (veryfiCart.length === 1) {
-      console.log('jatanocarro');
       console.log(veryfiCart);
       if (veryfiCart[0].quant === veryfiCart[0].available_quantity) {
         return false;
