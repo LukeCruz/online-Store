@@ -22,8 +22,26 @@ class ItemCart extends React.Component {
     this.setState({ remove: false });
   };
 
+  verifyAvaliabeQuantity = (elem) => {
+    const cartItens = localStorage.getItem('cartProducts')
+      ? JSON.parse(localStorage.getItem('cartProducts')) : [];
+    console.log(cartItens.length);
+    if (cartItens.length === 0) return true;
+    const veryfiCart = cartItens.filter((item) => item.id === elem.id);
+    console.log(veryfiCart);
+    if (veryfiCart.length === 1) {
+      console.log('jatanocarro');
+      console.log(veryfiCart);
+      if (veryfiCart[0].quant === veryfiCart[0].available_quantity) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   handleClickAdd = () => {
     const { item } = this.props;
+    if (!this.verifyAvaliabeQuantity(item)) return;
     const getItem = localStorage.getItem('cartProducts');
     const json = JSON.parse(getItem);
     json.forEach((e) => {

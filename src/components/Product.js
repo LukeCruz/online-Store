@@ -20,7 +20,6 @@ class Product extends React.Component {
   }
 
   getCartQuant = () => {
-    console.log('vimaqui');
     const cartItens = localStorage.getItem('cartProducts')
       ? JSON.parse(localStorage.getItem('cartProducts')) : [];
     const countQuant = (arr) => {
@@ -31,7 +30,6 @@ class Product extends React.Component {
       });
       return finalArr;
     };
-    console.log(countQuant(cartItens));
     this.setState({ cartQuanti: countQuant(cartItens) });
   };
 
