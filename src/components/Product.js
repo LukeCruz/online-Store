@@ -11,11 +11,27 @@ class Product extends React.Component {
     attributes: [],
     imgUrl: '',
     trueFalse: false,
+    cartQuanti: 0,
   };
 
   componentDidMount() {
     this.getProductById();
+    this.getCartQuant();
   }
+
+  getCartQuant = () => {
+    const cartItens = localStorage.getItem('cartProducts')
+      ? JSON.parse(localStorage.getItem('cartProducts')) : [];
+    const countQuant = (arr) => {
+      let finalArr = 0;
+      if (arr === []) return 0;
+      arr.forEach((item) => {
+        finalArr += item.quant;
+      });
+      return finalArr;
+    };
+    this.setState({ cartQuanti: countQuant(cartItens) });
+  };
 
   async getProductById() {
     const { match } = this.props;
@@ -60,7 +76,7 @@ class Product extends React.Component {
   };
 
   render() {
-    const { details, attributes, imgUrl, trueFalse } = this.state;
+    const { details, attributes, imgUrl, trueFalse, cartQuanti } = this.state;
     const { title, price, thumbnail } = details;
     const cartHeader = true;
     const { match } = this.props;
@@ -68,7 +84,7 @@ class Product extends React.Component {
     const { id } = params;
     return (
       <div data-testid="product">
-        <Header cartHeader={ cartHeader } />
+        <Header itensQuanti={ cartQuanti } cartHeader={ cartHeader } />
         <div className="product-details">
           <div className="img-title-product">
             <p data-testid="product-detail-name">{title}</p>

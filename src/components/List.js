@@ -11,12 +11,28 @@ class List extends React.Component {
     click: false,
     retProducts: [],
     checked: false,
+    cartQuanti: 0,
   };
 
   async componentDidMount() {
+    this.getCartQuant();
     const categories = await getCategories();
     this.setState({ categories });
   }
+
+  getCartQuant = () => {
+    const cartItens = localStorage.getItem('cartProducts')
+      ? JSON.parse(localStorage.getItem('cartProducts')) : [];
+    const countQuant = (arr) => {
+      let finalArr = 0;
+      if (arr === []) return 0;
+      arr.forEach((item) => {
+        finalArr += item.quant;
+      });
+      return finalArr;
+    };
+    this.setState({ cartQuanti: countQuant(cartItens) });
+  };
 
   handleChange = (event) => {
     const { target } = event;
@@ -24,8 +40,26 @@ class List extends React.Component {
     this.setState({ [name]: value });
   };
 
+  verifyAvaliabeQuantity = (elem) => {
+    const cartItens = localStorage.getItem('cartProducts')
+      ? JSON.parse(localStorage.getItem('cartProducts')) : [];
+    console.log(cartItens.length);
+    if (cartItens.length === 0) return true;
+    const veryfiCart = cartItens.filter((item) => item.id === elem.id);
+    console.log(veryfiCart);
+    if (veryfiCart.length === 1) {
+      console.log('jatanocarro');
+      console.log(veryfiCart);
+      if (veryfiCart[0].quant === veryfiCart[0].available_quantity) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   clickSla = (event) => {
     const element = JSON.parse(event.target.value);
+    if (!this.verifyAvaliabeQuantity(element)) return;
     const getItem = localStorage.getItem('cartProducts');
     let json = JSON.parse(getItem);
     if (json !== null) {
@@ -49,7 +83,10 @@ class List extends React.Component {
       json.push(element);
       localStorage.setItem('cartProducts', JSON.stringify(json));
     }
+    this.getCartQuant();
   };
+
+  freteGratis = (item) => item.shipping.free_shipping;
 
   listProducts = () => {
     const { products, click, checked, retProducts } = this.state;
@@ -58,6 +95,7 @@ class List extends React.Component {
       return (
         retProducts.results.map((e, index) => (
           <div className="product-card" key={ e.title }>
+            { this.freteGratis(e) && <p data-testid="free-shipping">Frete Gratis</p> }
             <Card
               key={ index }
               thumbnail={ e.thumbnail }
@@ -134,13 +172,14 @@ class List extends React.Component {
   };
 
   render() {
-    const { categories, query } = this.state;
+    const { categories, query, cartQuanti } = this.state;
     return (
       <div className="page-container">
         <Header
           handleChange={ this.handleChange }
           handleClick={ this.handleClick }
           query={ query }
+          itensQuanti={ cartQuanti }
         />
         <div className="main-container">
           <div className="list-products">

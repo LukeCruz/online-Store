@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 class Header extends React.Component {
   render() {
-    const { query, handleChange, handleClick, cartHeader } = this.props;
+    const { query, handleChange, handleClick, cartHeader, itensQuanti } = this.props;
     return (
       <div className="header-container">
         {cartHeader
@@ -33,6 +33,7 @@ class Header extends React.Component {
         >
           Carrinho
         </Link>
+        <p data-testid="shopping-cart-size">{itensQuanti}</p>
       </div>
     );
   }
