@@ -11,12 +11,30 @@ class List extends React.Component {
     click: false,
     retProducts: [],
     checked: false,
+    cartQuanti: 0,
   };
 
   async componentDidMount() {
+    this.getCartQuant();
     const categories = await getCategories();
     this.setState({ categories });
   }
+
+  getCartQuant = () => {
+    console.log('vimaqui');
+    const cartItens = localStorage.getItem('cartProducts')
+      ? JSON.parse(localStorage.getItem('cartProducts')) : [];
+    const countQuant = (arr) => {
+      let finalArr = 0;
+      if (arr === []) return 0;
+      arr.forEach((item) => {
+        finalArr += item.quant;
+      });
+      return finalArr;
+    };
+    console.log(countQuant(cartItens));
+    this.setState({ cartQuanti: countQuant(cartItens) });
+  };
 
   handleChange = (event) => {
     const { target } = event;
@@ -49,6 +67,7 @@ class List extends React.Component {
       json.push(element);
       localStorage.setItem('cartProducts', JSON.stringify(json));
     }
+    this.getCartQuant();
   };
 
   listProducts = () => {
@@ -134,13 +153,14 @@ class List extends React.Component {
   };
 
   render() {
-    const { categories, query } = this.state;
+    const { categories, query, cartQuanti } = this.state;
     return (
       <div className="page-container">
         <Header
           handleChange={ this.handleChange }
           handleClick={ this.handleClick }
           query={ query }
+          itensQuanti={ cartQuanti }
         />
         <div className="main-container">
           <div className="list-products">
