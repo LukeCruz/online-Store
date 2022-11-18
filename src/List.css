@@ -162,14 +162,14 @@
 a {
   color: black;
   font-family: Roboto , sans-serif;
-  text-decoration: none;
   display: inline;
+  text-decoration: none;
 }
 
 .cartIcon {
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
 }
 
 .cart-icon-img {
@@ -179,21 +179,17 @@ a {
 
 .icon-quant {
   border-radius: 5px;
-  font-size: 15px;
   color: black;
+  font-size: 15px;
 }
 
 .quant-div {
-  width: 22px;
-  height: 22px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  border-radius: 15px;
   align-items: center;
+  display: flex;
+  height: 22px;
+  width: 22px;
+  flex-direction: row;
+  border-radius: 15px;
+  justify-content: center;
   background-color: aqua;
-}
-
-.img-div {
-
 }
