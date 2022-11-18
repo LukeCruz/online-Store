@@ -7,9 +7,11 @@ class Cart extends React.Component {
   state = {
     cartItem: [],
     trueFalse: false,
+    cartQuanti: 0,
   };
 
   componentDidMount() {
+    this.getCartQuant();
     const getItem = localStorage.getItem('cartProducts');
     const json = JSON.parse(getItem);
     this.setState({ cartItem: json }, () => {
@@ -19,13 +21,27 @@ class Cart extends React.Component {
     });
   }
 
+  getCartQuant = () => {
+    const cartItens = localStorage.getItem('cartProducts')
+      ? JSON.parse(localStorage.getItem('cartProducts')) : [];
+    const countQuant = (arr) => {
+      let finalArr = 0;
+      if (arr === []) return 0;
+      arr.forEach((item) => {
+        finalArr += item.quant;
+      });
+      return finalArr;
+    };
+    this.setState({ cartQuanti: countQuant(cartItens) });
+  };
+
   render() {
-    const { cartItem, trueFalse } = this.state;
+    const { cartItem, trueFalse, cartQuanti } = this.state;
     const emptyCartOrCart = cartItem === null;
     const cartHeader = true;
     return (
       <div>
-        <Header cartHeader={ cartHeader } />
+        <Header itensQuanti={ cartQuanti } cartHeader={ cartHeader } />
         <div className="cart-container">
           <h2> Seu Carrinho</h2>
           {emptyCartOrCart

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import cart from '../icons8-carrinho-de-compras-30.png';
 
 class Header extends React.Component {
   render() {
@@ -31,9 +32,15 @@ class Header extends React.Component {
           data-testid="shopping-cart-button"
           to="/cart"
         >
-          Carrinho
+          <div className="cartIcon">
+            <div className="img-div">
+              <img className="cart-icon-img" alt="cart-icon" src={ cart } />
+            </div>
+            <div className="quant-div">
+              <p className="icon-quant" data-testid="shopping-cart-size">{itensQuanti}</p>
+            </div>
+          </div>
         </Link>
-        <p data-testid="shopping-cart-size">{itensQuanti}</p>
       </div>
     );
   }
