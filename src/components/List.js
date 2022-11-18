@@ -190,6 +190,7 @@ class List extends React.Component {
             <aside className="categories">
               {categories.map((category, id) => (
                 <label key={ id } data-testid="category" htmlFor="category">
+                  {category.name}
                   <input
                     onClick={ this.handleCheck }
                     key={ id }
@@ -198,7 +199,6 @@ class List extends React.Component {
                     name="category"
                     value={ category.id }
                   />
-                  {category.name}
                 </label>
               ))}
             </aside>
