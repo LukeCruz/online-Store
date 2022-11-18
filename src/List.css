@@ -189,7 +189,7 @@ a {
   border-radius: 15px;
   display: flex;
   flex-direction: row;
-  justify-content: center;
   height: 22px;
+  justify-content: center;
   width: 22px;
 }
