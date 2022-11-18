@@ -161,8 +161,8 @@
 
 a {
   color: black;
-  font-family: Roboto , sans-serif;
   display: inline;
+  font-family: Roboto , sans-serif;
   text-decoration: none;
 }
 
@@ -185,11 +185,11 @@ a {
 
 .quant-div {
   align-items: center;
+  border-radius: 15px;
+  background-color: aqua;
   display: flex;
+  flex-direction: row;
   height: 22px;
   width: 22px;
-  flex-direction: row;
-  border-radius: 15px;
   justify-content: center;
-  background-color: aqua;
 }
